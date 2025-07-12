@@ -3,44 +3,49 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Odoo_Hackathon_Project</title>
+    <title>@ViewData["Title"] - StackIt</title>
+    <!-- Bootstrap and custom styles -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Odoo_Hackathon_Project.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Odoo_Hackathon_Project_MVC.styles.css" asp-append-version="true" />
+    <!-- Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Odoo_Hackathon_Project</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+    <!-- ===================== Top Navbar ===================== -->
+    <nav class="stackit-navbar">
+        <div class="stackit-navbar-container">
+            <!-- Logo: Far left, clickable -->
+            <a asp-controller="Dashboard" asp-action="Dashboard" class="stackit-logo stackit-logo-it">Stack<span class="stackit-logo-it">It</span></a>
+            <!-- Center: Large search bar -->
+            <div class="stackit-navbar-center">
+                <div class="stackit-search-box stackit-search-box-large">
+                    <i class="fas fa-search stackit-search-icon"></i>
+                    <input type="text" class="stackit-search-input stackit-search-input-large" placeholder="Search StackIt..." />
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - Odoo_Hackathon_Project - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <!-- Right: Ask/Home button, notification, user profile -->
+            <div class="stackit-navbar-right">
+                @if ((string)ViewContext.RouteData.Values["controller"] == "Question" && (string)ViewContext.RouteData.Values["action"] == "AskQuestion")
+                {
+                    <a asp-controller="Dashboard" asp-action="Dashboard" class="stackit-btn stackit-ask-btn"><i class="fas fa-home"></i> Home</a>
+                }
+                else
+                {
+                    <a asp-controller="Question" asp-action="AskQuestion" class="stackit-btn stackit-ask-btn"><i class="fas fa-plus"></i> Ask Question</a>
+                }
+                <button class="stackit-notification-btn stackit-navbar-icon"><i class="fas fa-bell"></i></button>
+                <button class="stackit-user-btn stackit-navbar-icon"><i class="fas fa-user-circle"></i></button>
+            </div>
         </div>
-    </footer>
+    </nav>
+    <!-- ===================== Main Content ===================== -->
+    <main class="stackit-main-content">
+        <div class="stackit-content">
+            @RenderBody() <!-- This is where each page's content will be rendered -->
+        </div>
+    </main>
+    <!-- ===================== Scripts ===================== -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

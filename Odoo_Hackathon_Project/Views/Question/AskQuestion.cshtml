@@ -1,0 +1,36 @@
+﻿@{
+    ViewData["Title"] = "Ask Question";
+}
+
+<!-- ===================== Ask Question Page ===================== -->
+<div class="container d-flex justify-content-center align-items-center" style="min-height:80vh;">
+    <form class="askq-form " style="max-width: 580px; width: 100%; border: 2px solid #fff; border-radius: 20px; padding: 34px 30px;">
+        <label class="askq-label" for="title">Title</label>
+        <input class="askq-input" type="text" id="title" name="title" placeholder="Enter your question title..." />
+
+        <label class="askq-label" for="desc">Description</label>
+        <textarea id="desc" name="desc"></textarea>
+
+        <label class="askq-label" for="tags">Tags</label>
+        <input class="askq-input" type="text" id="tags" name="tags" placeholder="#UserName1, #UserName2, ..." />
+
+        <button class="askq-submit" type="submit">Submit</button>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.tiny.cloud/1/adifgwt7nmwy7d18kbwv18ejncq8dufsabel2174reb5qj88/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+            selector: '#desc',
+            menubar: false,
+            plugins: 'lists link emoticons',
+            toolbar: 'bold italic underline | bullist numlist | link emoticons | alignleft aligncenter alignright',
+            height: 200,
+            skin: 'oxide',
+            content_css: 'dark',
+            branding: false,
+            placeholder: 'Describe your question in detail...'
+        });
+    </script>
+}
