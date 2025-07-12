@@ -19,8 +19,9 @@ public class QuestionController : Controller
     }
     public IActionResult Index()
     {
-        return View("AskQuestion");
+        return View("~/Views/Question/AskQuestion.cshtml");
     }
+
     [HttpPost]
     public async Task<IActionResult> AskQuestion(Question question)
     {
