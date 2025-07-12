@@ -1,0 +1,28 @@
+﻿@model Odoo_Hackathon_Project.Models.User
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="container mt-5" style="max-width: 400px;">
+    <h2>Login</h2>
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">@ViewBag.Error</div>
+    }
+
+    <form method="post" asp-action="Index">
+        <div class="mb-3">
+            <label asp-for="Username" class="form-label"></label>
+            <input asp-for="Username" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="PasswordHash" class="form-label">Password</label>
+            <input asp-for="PasswordHash" class="form-control" type="password" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+</div>

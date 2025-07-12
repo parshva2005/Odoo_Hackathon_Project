@@ -1,19 +1,20 @@
 ﻿@model List<Odoo_Hackathon_Project.Models.DashboardQuestionDTO>
+@using Odoo_Hackathon_Project.Helpers
 
 @{
     ViewData["Title"] = "Dashboard";
 }
 
 <!-- ===================== Dashboard Content ===================== -->
-<!-- ===== Content Filters Row: Search Left, Filters Center, Ask Button Right ===== -->
-<div class="dashboard-filters-row" style="position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; width: 100vw; display: flex; align-items: center; -webkit-justify-content:space-around; margin-bottom: 18px; gap: 18px; background: transparent;">
-    <div style="flex:1; max-width: 340px;">
-        <div class="stackit-search-box stackit-search-box-large" style="margin-right:10%;">
+<!-- ===== Content Filters Row: Search, Filters, Ask Button (Evenly Centered) ===== -->
+<div class="dashboard-filters-row" style="position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; width: 100vw; display: grid; grid-template-columns: 1fr 1fr 1fr; place-items: center; margin-bottom: 18px; gap: 0; background: transparent;">
+    <div style="width: 100%; display: flex; justify-content: center;">
+        <div class="stackit-search-box stackit-search-box-large">
             <i class="fas fa-search stackit-search-icon"></i>
             <input type="text" class="stackit-search-input stackit-search-input-large" placeholder="Search Questions..." />
         </div>
     </div>
-    <div style="flex:2; display: flex; justify-content: center;">
+    <div style="width: 100%; display: flex; justify-content: center;">
         <div class="stackit-content-filters" style="margin-bottom: 0;">
             <div class="stackit-filter-tabs">
                 <button class="stackit-filter-tab active">Latest</button>
@@ -23,10 +24,12 @@
             </div>
         </div>
     </div>
-    <div style="flex:1; display: flex; justify-content: flex-end;">
-        <a href="/Question/AskQuestion" class="stackit-btn stackit-ask-btn"><i class="fas fa-plus"></i> Ask New Question</a>
+    <div style="width: 100%; display: flex; justify-content: center;">
+        <a asp-controller="Question" asp-action="index" class="stackit-btn stackit-ask-btn"><i class="fas fa-plus"></i> Ask New Question</a>
     </div>
 </div>
+<!-- =========================== -->
+
 <div class="stackit-dashboard-content stackit-dashboard-centered">
 
     <div class="stackit-feed" id="questionFeed">
@@ -39,7 +42,7 @@
                 <div class="stackit-question-header">
                     <div class="stackit-question-meta">
                         <div class="stackit-user-name">Anonymous</div>
-                        <div class="stackit-post-time">@q.CreatedAt.ToShortDateString()</div>
+                        <div class="stackit-post-time">@TimeAgoHelper.GetTimeAgo(q.CreatedAt)</div>
                     </div>
                     <button class="stackit-more-btn">
                         <i class="fas fa-ellipsis-h"></i>

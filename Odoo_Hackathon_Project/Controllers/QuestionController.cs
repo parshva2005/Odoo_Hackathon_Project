@@ -13,6 +13,14 @@ public class QuestionController : Controller
         _client.BaseAddress = new Uri("https://localhost:7022/api/");
     }
 
+    public async Task<IActionResult> AskQuestion()
+    {
+        return View();
+    }
+    public IActionResult Index()
+    {
+        return View("AskQuestion");
+    }
     [HttpPost]
     public async Task<IActionResult> AskQuestion(Question question)
     {

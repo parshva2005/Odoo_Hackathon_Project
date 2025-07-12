@@ -19,22 +19,25 @@ namespace Odoo_Hackathon_Project.Controllers
         {
             var response = await _client.GetAsync("Question");
             if (!response.IsSuccessStatusCode)
-                return View(new List<Question>());
+                return View(new List<DashboardQuestionDTO>());
 
             var json = await response.Content.ReadAsStringAsync();
             var questions = JsonConvert.DeserializeObject<List<Question>>(json) ?? new List<Question>();
 
-            // Inject mock vote/view/answer data
-            var rnd = new Random();
-            foreach (var q in questions)
+            // Map manually
+            var result = questions.Select(q => new DashboardQuestionDTO
             {
-                q.Likes = rnd.Next(0, 100);
-                q.Views = rnd.Next(100, 1000);
-                q.AnswerCount = rnd.Next(0, 20);
-                q.IsRead = rnd.Next(0, 2) == 1;
-            }
+                Id = q.Id,
+                Title = q.Title ?? "",
+                Content = q.Content,
+                CreatedAt = q.CreatedAt,
+                VoteCount = q.Likes,
+                AnswerCount = q.AnswerCount,
+                Views = q.Views
+            }).ToList();
 
-            return View(questions);
+            return View(result);
         }
+
     }
 }

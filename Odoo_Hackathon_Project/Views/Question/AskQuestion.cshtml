@@ -4,7 +4,7 @@
 
 <!-- ===================== Ask Question Page ===================== -->
 <div class="container d-flex justify-content-center align-items-center" style="min-height:80vh;">
-    <form class="askq-form " style="max-width: 580px; width: 100%; border: 2px solid #fff; border-radius: 20px; padding: 34px 30px;">
+    <form asp-controller="Question" asp-action="AskQuestion"class="askq-form " style="max-width: 580px; width: 100%; border: 2px solid #fff; border-radius: 20px; padding: 34px 30px;">
         <label class="askq-label" for="title">Title</label>
         <input class="askq-input" type="text" id="title" name="title" placeholder="Enter your question title..." />
 
