@@ -1,179 +1,145 @@
-﻿@model List<Question>
-
+﻿@model List<Odoo_Hackathon_Project.Models.DashboardQuestionDTO>
 
 @{
     ViewData["Title"] = "Dashboard";
 }
 
 <!-- ===================== Dashboard Content ===================== -->
+<!-- ===== Content Filters Row: Search Left, Filters Center, Ask Button Right ===== -->
+<div class="dashboard-filters-row" style="position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; width: 100vw; display: flex; align-items: center; -webkit-justify-content:space-around; margin-bottom: 18px; gap: 18px; background: transparent;">
+    <div style="flex:1; max-width: 340px;">
+        <div class="stackit-search-box stackit-search-box-large" style="margin-right:10%;">
+            <i class="fas fa-search stackit-search-icon"></i>
+            <input type="text" class="stackit-search-input stackit-search-input-large" placeholder="Search Questions..." />
+        </div>
+    </div>
+    <div style="flex:2; display: flex; justify-content: center;">
+        <div class="stackit-content-filters" style="margin-bottom: 0;">
+            <div class="stackit-filter-tabs">
+                <button class="stackit-filter-tab active">Latest</button>
+                <button class="stackit-filter-tab">Trending</button>
+                <button class="stackit-filter-tab">Most Discussed</button>
+                <button class="stackit-filter-tab">Unanswered</button>
+            </div>
+        </div>
+    </div>
+    <div style="flex:1; display: flex; justify-content: flex-end;">
+        <a href="/Question/AskQuestion" class="stackit-btn stackit-ask-btn"><i class="fas fa-plus"></i> Ask New Question</a>
+    </div>
+</div>
 <div class="stackit-dashboard-content stackit-dashboard-centered">
-    <!-- ===== Content Filters (Tabs) ===== -->
-    <div class="stackit-content-filters">
-        <div class="stackit-filter-tabs">
-            <button class="stackit-filter-tab active">Latest</button>
-            <button class="stackit-filter-tab">Trending</button>
-            <button class="stackit-filter-tab">Most Discussed</button>
-            <button class="stackit-filter-tab">Unanswered</button>
-        </div>
-    </div>
 
-    <!-- ===== Question Feed (List of Questions) ===== -->
     <div class="stackit-feed" id="questionFeed">
-        foreach(var que in Model){
-        <!-- === Question Card 1 === -->
-        <div class="stackit-question-card">
-            <div class="stackit-question-header">
-                <!-- User Name and Post Time -->
-                <div class="stackit-question-meta">
-                    <div class="stackit-user-name"></div>
-                    <div class="stackit-post-time">2 hours ago</div>
+        @foreach (var q in Model)
+        {
+            <div class="stackit-question-card"
+                 data-created="@q.CreatedAt.Ticks"
+                 data-votes="@q.VoteCount"
+                 data-answers="@q.AnswerCount">
+                <div class="stackit-question-header">
+                    <div class="stackit-question-meta">
+                        <div class="stackit-user-name">Anonymous</div>
+                        <div class="stackit-post-time">@q.CreatedAt.ToShortDateString()</div>
+                    </div>
+                    <button class="stackit-more-btn">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </button>
                 </div>
-                <!-- More Options Button -->
-                <button class="stackit-more-btn">
-                    <i class="fas fa-ellipsis-h"></i>
-                </button>
-            </div>
-            <div class="stackit-question-content">
-                <!-- Question Title -->
-                <div class="stackit-question-title">How to join 2 columns in a data set to make a separate column in SQL</div>
-                <!-- Question Description -->
-                <div class="stackit-question-desc">I do not know the code for it as I am a beginner. As an example what I need to do is like there is a column 1 containing First name, and column 2 consists of last name I want a column to combine both names...</div>
-                <!-- Tags -->
-                <div class="stackit-question-tags">
-                    <span class="stackit-tag">#SQL</span>
-                    <span class="stackit-tag">#Database</span>
-                    <span class="stackit-tag">#Beginner</span>
-                </div>
-            </div>
-            <!-- Question Actions: Like, Comment -->
-            <div class="stackit-question-actions">
-                <button class="stackit-action-btn">
-                    <i class="fas fa-thumbs-up"></i>
-                    <span>24</span>
-                </button>
-                <a href="/Answer/AnswerPage" class="stackit-action-btn">
-                    <i class="fas fa-comment"></i>
-                    <span>5 answers</span>
-                </a>
-            </div>
-        </div>
-        }
-        
 
-        
+                <div class="stackit-question-content">
+                    <div class="stackit-question-title">@q.Title</div>
+                    <div class="stackit-question-desc">@q.Content</div>
+                    <div class="stackit-question-tags">
+                        <span class="stackit-tag">#QnA</span>
+                        <span class="stackit-tag">#StackIt</span>
+                    </div>
+                </div>
+
+                <div class="stackit-question-actions">
+                    <button class="stackit-action-btn">
+                        <i class="fas fa-thumbs-up"></i>
+                        <span>@q.VoteCount</span>
+                    </button>
+                    <a href="/Answer/AnswerPage?questionId=@q.Id" class="stackit-action-btn">
+                        <i class="fas fa-comment"></i>
+                        <span>@q.AnswerCount answers</span>
+                    </a>
+                </div>
+            </div>
+        }
     </div>
 
-    <!-- ===== Pagination (Page Numbers) ===== -->
     <div class="stackit-pagination">
-        <button class="stackit-page-btn" id="prevBtn">
-            <i class="fas fa-chevron-left"></i>
-        </button>
+        <button class="stackit-page-btn" id="prevBtn"><i class="fas fa-chevron-left"></i></button>
         <span class="stackit-page stackit-page-active" data-page="1">1</span>
         <span class="stackit-page" data-page="2">2</span>
         <span class="stackit-page" data-page="3">3</span>
-        <span class="stackit-page" data-page="4">4</span>
-        <span class="stackit-page" data-page="5">5</span>
-        <button class="stackit-page-btn" id="nextBtn">
-            <i class="fas fa-chevron-right"></i>
-        </button>
+        <button class="stackit-page-btn" id="nextBtn"><i class="fas fa-chevron-right"></i></button>
     </div>
 </div>
 
 @section Scripts {
     <script>
-        // Pagination functionality
-        let currentPage = 1;
         const questionsPerPage = 3;
-        const totalQuestions = document.querySelectorAll('.stackit-question-card').length;
-        const totalPages = Math.ceil(totalQuestions / questionsPerPage);
+        let currentPage = 1;
 
-        function showPage(page) {
-            const questions = document.querySelectorAll('.stackit-question-card');
-            const startIndex = (page - 1) * questionsPerPage;
-            const endIndex = startIndex + questionsPerPage;
-
-            // Hide all questions
-            questions.forEach((question, index) => {
-                if (index >= startIndex && index < endIndex) {
-                    question.style.display = 'block';
-                } else {
-                    question.style.display = 'none';
-                }
-            });
-
-            // Update pagination buttons
-            updatePaginationButtons(page);
-        }
-
-        function updatePaginationButtons(page) {
-            const pageButtons = document.querySelectorAll('.stackit-page');
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-
-            // Update active page
-            pageButtons.forEach(btn => {
-                btn.classList.remove('stackit-page-active');
-                if (parseInt(btn.dataset.page) === page) {
-                    btn.classList.add('stackit-page-active');
-                }
-            });
-
-            // Update navigation buttons
-            prevBtn.disabled = page === 1;
-            nextBtn.disabled = page === totalPages;
-
-            // Visual feedback for disabled buttons
-            if (page === 1) {
-                prevBtn.style.opacity = '0.5';
-                prevBtn.style.cursor = 'not-allowed';
-            } else {
-                prevBtn.style.opacity = '1';
-                prevBtn.style.cursor = 'pointer';
-            }
-
-            if (page === totalPages) {
-                nextBtn.style.opacity = '0.5';
-                nextBtn.style.cursor = 'not-allowed';
-            } else {
-                nextBtn.style.opacity = '1';
-                nextBtn.style.cursor = 'pointer';
-            }
-        }
-
-        // Event listeners
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize first page
+        document.addEventListener('DOMContentLoaded', () => {
             showPage(1);
-
-            // Page number clicks
             document.querySelectorAll('.stackit-page').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const page = parseInt(this.dataset.page);
-                    if (page !== currentPage) {
-                        currentPage = page;
-                        showPage(currentPage);
-                    }
+                btn.addEventListener('click', () => {
+                    currentPage = parseInt(btn.dataset.page);
+                    showPage(currentPage);
                 });
             });
-
-            // Previous button
-            document.getElementById('prevBtn').addEventListener('click', function() {
+            document.getElementById('prevBtn').addEventListener('click', () => {
                 if (currentPage > 1) {
                     currentPage--;
                     showPage(currentPage);
                 }
             });
-
-            // Next button
-            document.getElementById('nextBtn').addEventListener('click', function() {
+            document.getElementById('nextBtn').addEventListener('click', () => {
+                const totalPages = Math.ceil(document.querySelectorAll('.stackit-question-card').length / questionsPerPage);
                 if (currentPage < totalPages) {
                     currentPage++;
                     showPage(currentPage);
                 }
             });
         });
+
+        function showPage(page) {
+            const questions = document.querySelectorAll('.stackit-question-card');
+            const start = (page - 1) * questionsPerPage;
+            const end = start + questionsPerPage;
+
+            questions.forEach((q, i) => {
+                q.style.display = i >= start && i < end ? 'block' : 'none';
+            });
+
+            document.querySelectorAll('.stackit-page').forEach(btn => {
+                btn.classList.toggle('stackit-page-active', parseInt(btn.dataset.page) === page);
+            });
+
+            document.getElementById('prevBtn').disabled = page === 1;
+            document.getElementById('nextBtn').disabled = page === Math.ceil(questions.length / questionsPerPage);
+        }
+
+        function filterQuestions(type) {
+            const all = [...document.querySelectorAll('.stackit-question-card')];
+
+            if (type === 'latest') {
+                all.sort((a, b) => b.dataset.created - a.dataset.created);
+            } else if (type === 'trending') {
+                all.sort((a, b) => b.dataset.votes - a.dataset.votes);
+            } else if (type === 'mostDiscussed') {
+                all.sort((a, b) => b.dataset.answers - a.dataset.answers);
+            } else if (type === 'unanswered') {
+                all.forEach(q => q.style.display = q.dataset.answers == 0 ? 'block' : 'none');
+                return;
+            }
+
+            const container = document.getElementById('questionFeed');
+            all.forEach(q => container.appendChild(q));
+            showPage(1);
+        }
     </script>
 }
-
-
-

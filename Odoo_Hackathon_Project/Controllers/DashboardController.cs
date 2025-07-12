@@ -1,12 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Odoo_Hackathon_Project.Models;
-using Odoo_Hackathon_Project.Models.Odoo_Hackathon_API.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace Odoo_Hackathon_Project.Controllers
 {
@@ -17,30 +12,29 @@ namespace Odoo_Hackathon_Project.Controllers
         public DashboardController(IHttpClientFactory httpClientFactory)
         {
             _client = httpClientFactory.CreateClient();
-            _client.BaseAddress = new Uri("https://localhost:7022/api/"); // your real API base
+            _client.BaseAddress = new Uri("https://localhost:7022/api/");
         }
 
-        [HttpGet("dashboard")]
-        public async Task<ActionResult<IEnumerable<DashboardQuestionDTO>>> GetDashboardQuestions()
+        public async Task<IActionResult> Dashboard()
         {
-            var questions = await _context.Questions
-                .Include(q => q.Answers)
-                    .ThenInclude(a => a.Votes)
-                .ToListAsync();
+            var response = await _client.GetAsync("Question");
+            if (!response.IsSuccessStatusCode)
+                return View(new List<Question>());
 
-            var result = questions.Select(q => new DashboardQuestionDTO
+            var json = await response.Content.ReadAsStringAsync();
+            var questions = JsonConvert.DeserializeObject<List<Question>>(json) ?? new List<Question>();
+
+            // Inject mock vote/view/answer data
+            var rnd = new Random();
+            foreach (var q in questions)
             {
-                Id = q.Id,
-                Title = q.Title,
-                Content = q.Content,
-                CreatedAt = q.CreatedAt,
-                AnswerCount = q.Answers.Count,
-                VoteCount = q.Answers.Sum(a => a.Votes.Count(v => v.IsUpvote) - a.Votes.Count(v => !v.IsUpvote)),
-                Views = new Random().Next(100, 1000) // Optional mocked views
-            }).ToList();
+                q.Likes = rnd.Next(0, 100);
+                q.Views = rnd.Next(100, 1000);
+                q.AnswerCount = rnd.Next(0, 20);
+                q.IsRead = rnd.Next(0, 2) == 1;
+            }
 
-            return Ok(result);
+            return View(questions);
         }
-
     }
 }

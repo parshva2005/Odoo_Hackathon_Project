@@ -17,22 +17,11 @@
         <div class="stackit-navbar-container">
             <!-- Logo: Far left, clickable -->
             <a asp-controller="Dashboard" asp-action="Dashboard" class="stackit-logo stackit-logo-it">Stack<span class="stackit-logo-it">It</span></a>
-            <!-- Center: Large search bar -->
-            <div class="stackit-navbar-center">
-                <div class="stackit-search-box stackit-search-box-large">
-                    <i class="fas fa-search stackit-search-icon"></i>
-                    <input type="text" class="stackit-search-input stackit-search-input-large" placeholder="Search StackIt..." />
-                </div>
-            </div>
             <!-- Right: Ask/Home button, notification, user profile -->
             <div class="stackit-navbar-right">
                 @if ((string)ViewContext.RouteData.Values["controller"] == "Question" && (string)ViewContext.RouteData.Values["action"] == "AskQuestion")
                 {
                     <a asp-controller="Dashboard" asp-action="Dashboard" class="stackit-btn stackit-ask-btn"><i class="fas fa-home"></i> Home</a>
-                }
-                else
-                {
-                    <a asp-controller="Question" asp-action="AskQuestion" class="stackit-btn stackit-ask-btn"><i class="fas fa-plus"></i> Ask Question</a>
                 }
                 <button class="stackit-notification-btn stackit-navbar-icon"><i class="fas fa-bell"></i></button>
                 <button class="stackit-user-btn stackit-navbar-icon"><i class="fas fa-user-circle"></i></button>
